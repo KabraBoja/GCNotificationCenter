@@ -98,6 +98,13 @@ Add observers as usual in a normal NSNotificationCenter. Remember that notificat
         TestingObserver * newObserver = [[TestingObserver alloc]init];
         [_userNotificationCenter addGCObserver:newObserver];
 
+####Notify observers observers
+
+Notify your observers. Remember that your observers have to implement the declared protocol in order to received notifications. 
+
+        [_userNotificationCenter notifyUsersAdded:@[@"user1",@"user2"]];
+        [_userNotificationCenter notifyUserChatReceived:@"Hello world!!"];
+
 ####Remove observers
 
 Remove observers as usual in a normal NSNotificationCenter.
