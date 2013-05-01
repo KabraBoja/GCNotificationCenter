@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "TestingObserver.h"
 
 @interface ViewController ()
 
@@ -52,7 +53,8 @@
 
 -(void)beginTests
 {
-    for (int i=0;i<5; i++) {
+    //Creating observers
+    for (int i=0;i<15; i++) {
         TestingObserver * newObserver = [[TestingObserver alloc]init];
         [_userNotificationCenter addGCObserver:newObserver];
         [_observers addObject:newObserver];
@@ -70,6 +72,7 @@
         }*/
     }
     
+    //Notifying observers
     NSMutableString * user1 = [[NSMutableString alloc]initWithString:@"User1"];
     NSMutableString * user2 = [[NSMutableString alloc]initWithString:@"User2"];
     NSMutableString * user3 = [[NSMutableString alloc]initWithString:@"User3"];
@@ -91,14 +94,15 @@
         }*/
     }
     
-    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(removeObserverStep) userInfo:nil repeats:YES];
+    //Scheduling a removal of observers from notification center and from retained observers. Testing obserever deallocation
+    _timer = [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(removeObserverStep) userInfo:nil repeats:YES];
 
 }
 
 //Testing methods...
 -(void)removeObserverStep
 {
-    NSLog(@"Remove observer called");
+    //NSLog(@"Remove observer called");
     NSObject * o = _observers.anyObject;
     if (o) {
         [_userNotificationCenter removeGCObserver:o];
@@ -109,29 +113,3 @@
 
 @end
 
-#pragma mark - Custom Observer class (only for testing)
-
-@implementation TestingObserver
-
--(void)userChatReceived:(NSString *)chatMessage
-{
-    NSLog(@"Observer %d received userChatReceived notif %@",[self hash],nil);
-
-}
-
--(void)usersDeleted:(NSArray *)deletedUsers
-{
-    NSLog(@"Observer %d received usersDeleted notif %@",[self hash],nil);
-}
-
--(void)usersAdded:(NSArray *)addedUsers
-{
-    NSLog(@"Observer %d received usersAdded notif %@",[self hash],nil);
-}
-
--(void)dealloc
-{
-    NSLog(@"Observer %d deallocated ",[self hash]);
-}
-
-@end

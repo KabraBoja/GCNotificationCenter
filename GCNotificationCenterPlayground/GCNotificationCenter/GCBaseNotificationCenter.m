@@ -40,6 +40,7 @@
         //Concrete thread queue. (By default: main queue)
         NSAssert(queue != nil,@"Queue cannot be nil");
         _notificationCenterQueue = queue;
+        _lock = [[NSRecursiveLock alloc]init];
     }
     return self;
 }
@@ -47,21 +48,20 @@
 -(void)addGCObserver:(NSObject *)observer
 {
     NSAssert(observer != nil,@"Observer to add cannot be nil");
-    NSRecursiveLock * lock = [[NSRecursiveLock alloc]init];
-    [lock lock];
+    [_lock lock];
     
-   // [_notificationCenterQueue addOperationWithBlock:^{
-        if ([_observers containsObject:observer]){
-            NSAssert(NO,@"Cannot add the same observer more than once");
-        }
-        
-        if (![observer conformsToProtocol:_protocol]) {
-            NSAssert(NO,@"Cannot add an observer that doesnt implement the concrete notification center protocol");
-        }
-        [_observers addObject:observer];
-   // }];
+    // [_notificationCenterQueue addOperationWithBlock:^{
+    if ([_observers containsObject:observer]){
+        NSAssert(NO,@"Cannot add the same observer more than once");
+    }
     
-    [lock unlock];
+    if (![observer conformsToProtocol:_protocol]) {
+        NSAssert(NO,@"Cannot add an observer that doesnt implement the concrete notification center protocol");
+    }
+    [_observers addObject:observer];
+    // }];
+    
+    [_lock unlock];
 }
 
 
@@ -69,17 +69,16 @@
 -(void)removeGCObserver:(NSObject *)observer
 {
     NSAssert(observer != nil,@"Observer to remove cannot be nil");
-    NSRecursiveLock * lock = [[NSRecursiveLock alloc]init];
-    [lock lock];
+    [_lock lock];
     
     //[_notificationCenterQueue addOperationWithBlock:^{
-        if (![_observers containsObject:observer]) {
-            NSAssert(NO,@"Cannot remove the same observer more than once");
-        }
-        [_observers removeObject:observer];
+    if (![_observers containsObject:observer]) {
+        NSAssert(NO,@"Cannot remove the same observer more than once");
+    }
+    [_observers removeObject:observer];
     //}];
     
-    [lock unlock];
+    [_lock unlock];
 }
 
 -(id)init
@@ -94,39 +93,35 @@
 
 -(void)sendNotificationWithBlockWaitUntilFinished:(GCNotificationBlock)notification_block
 {
-    NSRecursiveLock * lock = [[NSRecursiveLock alloc]init];
-    [lock lock];
+    [_lock lock];
     [_observers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
         notification_block((NSObject*)obj);
     }];
-    [lock unlock];
+    [_lock unlock];
 }
 
 
 -(void)sendNotificationWithBlockUsingQueue:(GCNotificationBlock)notification_block
 {
-    NSRecursiveLock * lock = [[NSRecursiveLock alloc]init];
-    [lock lock];
+    [_lock lock];
     [_notificationCenterQueue addOperationWithBlock:^{
         [_observers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
             notification_block((NSObject*)obj);
         }];
     }];
-    [lock unlock];
+    [_lock unlock];
 }
 
 
 -(void)sendNotificationWithBlockUsingQueuedBlocks:(GCNotificationBlock)notification_block
 {
-    NSRecursiveLock * lock = [[NSRecursiveLock alloc]init];
-    [lock lock];
-    
+    [_lock lock];
     [_observers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
         [_notificationCenterQueue addOperationWithBlock:^{
             
             notification_block((NSObject*)obj);
         }];
     }];
-    [lock unlock];
+    [_lock unlock];
 }
 @end

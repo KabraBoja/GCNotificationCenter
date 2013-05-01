@@ -16,6 +16,7 @@ typedef void (^GCNotificationBlock)(NSObject * observer);
     NSMutableSet * _observers;
     Protocol * _protocol;
     NSOperationQueue * _notificationCenterQueue;
+    NSRecursiveLock * _lock;
 }
 
 /**

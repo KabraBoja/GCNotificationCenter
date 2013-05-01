@@ -23,8 +23,3 @@
 @end
 
 
-#pragma mark - Custom Observer class (only for testing)
-
-@interface TestingObserver : NSObject<UserManagementNotifications>
-
-@end

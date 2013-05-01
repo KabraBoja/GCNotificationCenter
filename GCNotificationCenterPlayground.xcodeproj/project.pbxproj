@@ -20,7 +20,8 @@
 		960F6E10172998F800806E88 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 960F6E0E172998F800806E88 /* ViewController_iPhone.xib */; };
 		960F6E13172998F800806E88 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 960F6E11172998F800806E88 /* ViewController_iPad.xib */; };
 		960F6E1C1729994700806E88 /* GCBaseNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 960F6E1B1729994700806E88 /* GCBaseNotificationCenter.m */; };
-		96CED17D172A738B00B78D27 /* UsersNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CED17C172A738B00B78D27 /* UsersNotificationCenter.m */; };
+		CB37F7F917318C3800AF826A /* UsersNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = CB37F7F817318C3800AF826A /* UsersNotificationCenter.m */; };
+		CB37F7FC17318CF500AF826A /* TestingObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = CB37F7FB17318CF500AF826A /* TestingObserver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,8 +44,10 @@
 		960F6E12172998F800806E88 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
 		960F6E1A1729994700806E88 /* GCBaseNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCBaseNotificationCenter.h; path = GCNotificationCenter/GCBaseNotificationCenter.h; sourceTree = "<group>"; };
 		960F6E1B1729994700806E88 /* GCBaseNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCBaseNotificationCenter.m; path = GCNotificationCenter/GCBaseNotificationCenter.m; sourceTree = "<group>"; };
-		96CED17B172A738B00B78D27 /* UsersNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsersNotificationCenter.h; sourceTree = "<group>"; };
-		96CED17C172A738B00B78D27 /* UsersNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersNotificationCenter.m; sourceTree = "<group>"; };
+		CB37F7F717318C3800AF826A /* UsersNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsersNotificationCenter.h; sourceTree = "<group>"; };
+		CB37F7F817318C3800AF826A /* UsersNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersNotificationCenter.m; sourceTree = "<group>"; };
+		CB37F7FA17318CF500AF826A /* TestingObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestingObserver.h; sourceTree = "<group>"; };
+		CB37F7FB17318CF500AF826A /* TestingObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestingObserver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +94,7 @@
 		960F6DF9172998F800806E88 /* GCNotificationCenterPlayground */ = {
 			isa = PBXGroup;
 			children = (
-				9644AE14172E99890053B9EC /* ExampleNotificationCenter */,
+				CB37F7F617318C3800AF826A /* ExampleNotificationCenter */,
 				960F6E191729991600806E88 /* GCNotificationCenter */,
 				960F6E02172998F800806E88 /* AppDelegate.h */,
 				960F6E03172998F800806E88 /* AppDelegate.m */,
@@ -127,13 +130,15 @@
 			name = GCNotificationCenter;
 			sourceTree = "<group>";
 		};
-		9644AE14172E99890053B9EC /* ExampleNotificationCenter */ = {
+		CB37F7F617318C3800AF826A /* ExampleNotificationCenter */ = {
 			isa = PBXGroup;
 			children = (
-				96CED17B172A738B00B78D27 /* UsersNotificationCenter.h */,
-				96CED17C172A738B00B78D27 /* UsersNotificationCenter.m */,
+				CB37F7F717318C3800AF826A /* UsersNotificationCenter.h */,
+				CB37F7F817318C3800AF826A /* UsersNotificationCenter.m */,
+				CB37F7FA17318CF500AF826A /* TestingObserver.h */,
+				CB37F7FB17318CF500AF826A /* TestingObserver.m */,
 			);
-			name = ExampleNotificationCenter;
+			path = ExampleNotificationCenter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,7 +212,8 @@
 				960F6E04172998F800806E88 /* AppDelegate.m in Sources */,
 				960F6E0D172998F800806E88 /* ViewController.m in Sources */,
 				960F6E1C1729994700806E88 /* GCBaseNotificationCenter.m in Sources */,
-				96CED17D172A738B00B78D27 /* UsersNotificationCenter.m in Sources */,
+				CB37F7F917318C3800AF826A /* UsersNotificationCenter.m in Sources */,
+				CB37F7FC17318CF500AF826A /* TestingObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
