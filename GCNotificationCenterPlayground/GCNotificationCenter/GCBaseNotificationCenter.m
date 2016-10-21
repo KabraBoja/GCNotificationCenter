@@ -31,8 +31,8 @@
         NSAssert(protocol != nil,@"Protocol cannot be nil");
         _protocol = protocol;
         
-        //Unretained mutable set.
-        _observers =  (__bridge_transfer NSMutableSet *)CFSetCreateMutable(nil, 0, nil);
+        //Unretained mutable map table.
+        _observers = [NSMapTable weakToWeakObjectsMapTable];
         
         //Reatined mutable set. (Not use, creates cyclic references)
         //_observers = [[NSMutableSet alloc]init];
@@ -45,20 +45,20 @@
     return self;
 }
 
--(void)addGCObserver:(NSObject *)observer
+-(void)addGCObserver:(id)observer
 {
     NSAssert(observer != nil,@"Observer to add cannot be nil");
     [_lock lock];
     
     // [_notificationCenterQueue addOperationWithBlock:^{
-    if ([_observers containsObject:observer]){
+    if ([_observers objectForKey:observer]){
         NSAssert(NO,@"Cannot add the same observer more than once");
     }
     
     if (![observer conformsToProtocol:_protocol]) {
         NSAssert(NO,@"Cannot add an observer that doesnt implement the concrete notification center protocol");
     }
-    [_observers addObject:observer];
+    [_observers setObject:observer forKey:observer];
     // }];
     
     [_lock unlock];
@@ -66,16 +66,16 @@
 
 
 
--(void)removeGCObserver:(NSObject *)observer
+-(void)removeGCObserver:(id)observer
 {
     NSAssert(observer != nil,@"Observer to remove cannot be nil");
     [_lock lock];
     
     //[_notificationCenterQueue addOperationWithBlock:^{
-    if (![_observers containsObject:observer]) {
+    if (![_observers objectForKey:observer]) {
         NSAssert(NO,@"Cannot remove the same observer more than once");
     }
-    [_observers removeObject:observer];
+    [_observers removeObjectForKey:observer];
     //}];
     
     [_lock unlock];
@@ -94,9 +94,9 @@
 -(void)sendNotificationWithBlockWaitUntilFinished:(GCNotificationBlock)notification_block
 {
     [_lock lock];
-    [_observers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    for (id obj in [_observers objectEnumerator]) {
         notification_block((NSObject*)obj);
-    }];
+    }
     [_lock unlock];
 }
 
@@ -105,9 +105,9 @@
 {
     [_lock lock];
     [_notificationCenterQueue addOperationWithBlock:^{
-        [_observers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        for (id obj in [_observers objectEnumerator]) {
             notification_block((NSObject*)obj);
-        }];
+        }
     }];
     [_lock unlock];
 }
@@ -116,12 +116,16 @@
 -(void)sendNotificationWithBlockUsingQueuedBlocks:(GCNotificationBlock)notification_block
 {
     [_lock lock];
-    [_observers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    for (id obj in [_observers objectEnumerator]) {
         [_notificationCenterQueue addOperationWithBlock:^{
-            
             notification_block((NSObject*)obj);
         }];
-    }];
+    }
     [_lock unlock];
+}
+
+-(NSOperationQueue *)getQueue
+{
+    return _notificationCenterQueue;
 }
 @end
