@@ -13,18 +13,20 @@ typedef void (^GCNotificationBlock)(NSObject * observer);
 
 @interface GCBaseNotificationCenter : NSObject
 {
-    NSMutableSet * _observers;
+    NSMapTable * _observers;
     Protocol * _protocol;
     NSOperationQueue * _notificationCenterQueue;
     NSRecursiveLock * _lock;
 }
+
+-(NSOperationQueue*)getQueue;
 
 /**
  *  Adds a new observer to the Notification Center. You cannot add the same observer more than once. You cannot
  *  add an observer that doesn't implement the Concrete Notification Center protocol.
  *
  */
--(void)addGCObserver:(NSObject *)observer;
+-(void)addGCObserver:(id)observer;
 
 /**
  *  Remove an existing observer from the Notification Center. You cannot remove a non attached observer.
@@ -32,7 +34,7 @@ typedef void (^GCNotificationBlock)(NSObject * observer);
  *  IMPORTANT: You have to remove all observer when they are not used any more because it may become a future
  *  zombie object.
  */
--(void)removeGCObserver:(NSObject *)observer;
+-(void)removeGCObserver:(id)observer;
 
 
 /**
@@ -48,7 +50,7 @@ typedef void (^GCNotificationBlock)(NSObject * observer);
  *
  *  @param protocol The protocol that has to be implemented by the added observers.
  *  @param queue By default the Main queue is used, but you can assign any other one created. If you
- *  user a different queue you have to add and remove observers from this concrete queue to avoid 
+ *  user a different queue you have to add and remove observers from this concrete queue to avoid
  *  possible incosistencies.
  */
 -(GCBaseNotificationCenter*)initWithProtocol:(Protocol*)protocol andQueue:(NSOperationQueue*)queue;
@@ -60,10 +62,10 @@ typedef void (^GCNotificationBlock)(NSObject * observer);
  *
  *  Ensure sequential execution!
  *
- *  IMPORTANT: You have to call this method from the same queue that you have created the Notification Center 
+ *  IMPORTANT: You have to call this method from the same queue that you have created the Notification Center
  *  to secure the thread safe.
- *  
- *  This method may block the UI but it's the Fastest. That's because adding operations and working with queues has a 
+ *
+ *  This method may block the UI but it's the Fastest. That's because adding operations and working with queues has a
  *  high performance impact.
  */
 -(void)sendNotificationWithBlockWaitUntilFinished:(GCNotificationBlock)notification_block;
